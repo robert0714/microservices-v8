@@ -1,5 +1,6 @@
 package microservices.book.gateway.configuration;
 
+import org.springframework.cloud.netflix.zuul.filters.route.FallbackProvider;
 import org.springframework.cloud.netflix.zuul.filters.route.ZuulFallbackProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,8 @@ import java.io.InputStream;
 public class HystrixFallbackConfiguration {
 
     @Bean
-    public ZuulFallbackProvider zuulFallbackProvider() {
-        return new ZuulFallbackProvider() {
+    public FallbackProvider zuulFallbackProvider() {
+        return new FallbackProvider() {
 
             @Override
             public String getRoute() {
@@ -64,6 +65,11 @@ public class HystrixFallbackConfiguration {
                     }
                 };
             }
+
+			@Override
+			public ClientHttpResponse fallbackResponse(Throwable cause) {
+				return fallbackResponse();
+			}
         };
     }
 }
